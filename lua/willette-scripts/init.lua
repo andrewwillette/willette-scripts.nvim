@@ -14,34 +14,21 @@ end
 
 M.initsplitterm = function(cmd)
   vim.cmd("split|terminal " .. cmd)
-  -- vim.cmd("split +terminal " .. cmd)
   vim.cmd("startinsert!")
 end
 
-M._setinteralgitfiles = function()
-  local gitfiles = io.popen("ls \"$HOME/git\"")
-  if gitfiles then
-    local filesParsed = gitfiles:read("*a")
-    M._gitFiles = splitstring(filesParsed, "%s")
-  else
-    print("failed to read git files at \"$HOME/git\"")
-  end
-end
-
--- verifynvimplugin return true if plugin available
-M.verifynvimplugin = function(requireString)
-  local ok, module = pcall(require, requireString)
+M.verifynvimplugin = function(module)
+  local ok, module = pcall(require, module)
   if not ok then
-    print("Missing " .. requireString .. " plugin.")
+    print("Missing " .. module .. " plugin.")
     return false, nil
   end
   return true, module
 end
 
--- verifyvimcommand return true if cmd is successful
-M.verifyvimcommand = function(cmdString)
-  if not pcall(vim.cmd, cmdString) then
-    print("vim cmd failed: " .. cmdString)
+M.verifyvimcommand = function(vimcmd)
+  if not pcall(vim.cmd, vimcmd) then
+    print("vim cmd failed: " .. vimcmd)
     return false
   end
   return true
@@ -59,7 +46,7 @@ M.verifyvimplugin = function(requireString)
   return false
 end
 
-local function trimFile(str, sep)
+local function trimfile(str, sep)
   sep = sep or '/'
   return str:match("(.*" .. sep .. ")")
 end
@@ -69,15 +56,15 @@ M.oneoffterminal = function(tcmd)
 end
 
 local function get_current_buffer_directory()
-  local curBuf = vim.api.nvim_buf_get_name(0)
-  local curDir = trimFile(curBuf)
-  return curDir
+  local curbuf = vim.api.nvim_buf_get_name(0)
+  local curdir = trimfile(curbuf)
+  return curdir
 end
 
 -- terminalBuffer create a termainal at the current buffers directory
 M.terminalbuffer = function()
-  local curDir = get_current_buffer_directory()
-  M.initsplitterm("cd " .. curDir .. "; exec zsh")
+  local curdir = get_current_buffer_directory()
+  M.initsplitterm("cd " .. curdir .. "; exec zsh")
 end
 
 -- terminalBuffer create a termainal at the current git root directory
@@ -108,8 +95,8 @@ M.reloadmoduleinkeymaps = function()
 end
 
 M.chmod0777currentbuf = function()
-  local curBuf = vim.api.nvim_buf_get_name(0)
-  vim.cmd("silent !cm7 " .. curBuf)
+  local curbuf = vim.api.nvim_buf_get_name(0)
+  vim.cmd("silent !cm7 " .. curbuf)
 end
 
 -- get base directory name of current git repo
