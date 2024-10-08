@@ -318,14 +318,14 @@ local function catpuccinlightlatte()
   setLualine("onelight")
 end
 
-local function catpuccinDarkFrappe()
+local function catpuccindarkfrappe()
   configurecatppuccin()
   vim.g.catppuccin_flavour = "frappe"
   if not verifyvimcmd("colorscheme catppuccin") then return end
   setLualine("horizon")
 end
 
-local function catpuccinDarkMacchiato()
+local function catpuccindarkmacchiato()
   configurecatppuccin()
   vim.g.catppuccin_flavour = "macchiato"
   if not verifyvimcmd("colorscheme catppuccin") then return end
@@ -339,7 +339,7 @@ local function catpuccindarkmocha()
   setLualine("horizon")
 end
 
-local function greenIsGood()
+local function greenisgood()
   vim.o.background = "dark"
   if not verifyvimcmd("colorscheme greenisgood") then return end
   setLualine("codedark")
@@ -505,14 +505,14 @@ local colorscheme_table = {
   ["duskfox dark"] = duskfoxdark,
   ["dayfox light"] = dayfoxlight,
   ["nightfox dark"] = nightfoxdark,
-  ["greenisgood dark"] = greenIsGood,
+  ["greenisgood dark"] = greenisgood,
   ["monochrome dark"] = monochrome,
   ["seoulbones dark"] = seoulbonesdark,
   ["seoulbones light"] = seoulboneslight,
   ["catppuncin light latte"] = catpuccinlightlatte,
   ["catppuncin dark mocha"] = catpuccindarkmocha,
-  ["catppuncin dark frappe"] = catpuccinDarkFrappe,
-  ["catppuncin dark macchiato"] = catpuccinDarkMacchiato,
+  ["catppuncin dark frappe"] = catpuccindarkfrappe,
+  ["catppuncin dark macchiato"] = catpuccindarkmacchiato,
   ["kanagawabones"] = kanagawabones,
   ["kanagawa"] = kanagawa,
   ["tundra"] = tundra,
@@ -528,51 +528,7 @@ for k, _ in pairs(colorscheme_table) do
   table.insert(colorscheme_select, k)
 end
 
---- for a time a toyed with updating zshrc to manage fzf configuration as well.
---- I don't do it now, though.
----@diagnostic disable-next-line: unused-function, unused-local
-local function search_and_replace(filename, search_string, replacement)
-  -- Read the file lines
-  local file = io.open(filename, "r")
-  if not file then
-    print("Cannot open file: " .. filename)
-    return
-  end
-
-  local lines = {}
-  for line in file:lines() do
-    table.insert(lines, line)
-  end
-  file:close()
-
-  -- Find the line matching the search_string and replace the next line
-  for i, line in ipairs(lines) do
-    if line:find(search_string) then
-      if i < #lines then
-        lines[i + 1] = replacement
-      end
-      break
-    end
-  end
-
-  -- Write the modified lines to a temporary file
-  local tmp_filename = filename .. ".tmp"
-  file = io.open(tmp_filename, "w")
-  if not file then
-    print("Cannot write to temporary file: " .. tmp_filename)
-    return
-  end
-
-  for _, line in ipairs(lines) do
-    file:write(line .. "\n")
-  end
-  file:close()
-
-  os.remove(filename)
-  os.rename(tmp_filename, filename)
-end
-
-M.selectColorscheme = function()
+M.selectcolorscheme = function()
   require 'fzf-lua'.fzf_exec(colorscheme_select, {
     actions = {
       ['default'] = function(selected)
@@ -582,6 +538,5 @@ M.selectColorscheme = function()
   })
 end
 
--- gruvboxDark()
-catpuccindarkmocha()
+gruvboxdark()
 return M

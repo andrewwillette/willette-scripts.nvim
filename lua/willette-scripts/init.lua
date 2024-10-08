@@ -1,6 +1,7 @@
 local M = {}
 
 -- return table of split inputstr by sep
+---@diagnostic disable-next-line: unused-local, unused-function
 local function splitstring(inputstr, sep)
   if sep == nil then
     sep = "%s"
@@ -18,12 +19,12 @@ M.initsplitterm = function(cmd)
 end
 
 M.verifynvimplugin = function(module)
-  local ok, module = pcall(require, module)
+  local ok, requiredmodule = pcall(require, module)
   if not ok then
     print("Missing " .. module .. " plugin.")
     return false, nil
   end
-  return true, module
+  return true, requiredmodule
 end
 
 M.verifyvimcommand = function(vimcmd)
@@ -108,6 +109,48 @@ M.getgitrepobase = function()
   end
   local reponame = lines[2]
   return reponame
+end
+
+---@diagnostic disable-next-line: unused-function, unused-local
+local function searchandreplace(filename, search_string, replacement)
+  -- Read the file lines
+  local file = io.open(filename, "r")
+  if not file then
+    print("Cannot open file: " .. filename)
+    return
+  end
+
+  local lines = {}
+  for line in file:lines() do
+    table.insert(lines, line)
+  end
+  file:close()
+
+  -- Find the line matching the search_string and replace the next line
+  for i, line in ipairs(lines) do
+    if line:find(search_string) then
+      if i < #lines then
+        lines[i + 1] = replacement
+      end
+      break
+    end
+  end
+
+  -- Write the modified lines to a temporary file
+  local tmp_filename = filename .. ".tmp"
+  file = io.open(tmp_filename, "w")
+  if not file then
+    print("Cannot write to temporary file: " .. tmp_filename)
+    return
+  end
+
+  for _, line in ipairs(lines) do
+    file:write(line .. "\n")
+  end
+  file:close()
+
+  os.remove(filename)
+  os.rename(tmp_filename, filename)
 end
 
 return M
