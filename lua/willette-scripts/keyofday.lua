@@ -21,7 +21,7 @@ local keys = {
 
 local sept26th2024 = {
   key = keys[0],
-  date = os.time({ year = 2024, month = 9, day = 26 }),
+  date = os.time({ year = 2024, month = 10, day = 8 }),
 }
 
 function days_difference(epoch1, epoch2)
@@ -32,11 +32,11 @@ end
 
 M.keyofday = function(date)
   local daysdifference = days_difference(sept26th2024.date, date)
-  local key = daysdifference % 12
-  print("key number is " .. key)
-  print("key of day is " .. keys[key])
-  print("days difference is " .. daysdifference)
-  return key
+  local key = (daysdifference) % 12
+  -- vim.print("trying to get key of day")
+  -- vim.print("keyofday is " .. keys[key])
+  -- print("key of day is " .. keys[key])
+  return keys[key]
 end
 
 return M
