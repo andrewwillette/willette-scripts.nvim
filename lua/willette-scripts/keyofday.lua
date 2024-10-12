@@ -19,23 +19,26 @@ local keys = {
   "G#",
 }
 
-local sept26th2024 = {
+local keyIndex0 = {
   key = keys[0],
   date = os.time({ year = 2024, month = 10, day = 8 }),
 }
 
-function days_difference(epoch1, epoch2)
+M.days_difference = function(epoch1, epoch2)
   local diff_in_seconds = os.difftime(epoch2, epoch1)
   local diff_in_days = math.floor(diff_in_seconds / (60 * 60 * 24))
-  return diff_in_days
+  return diff_in_days + 1
 end
 
+M.keyIndex0 = keyIndex0
+
+M.getdifferencewithmod = function(difference) return difference % 12 end
+
+
 M.keyofday = function(date)
-  local daysdifference = days_difference(sept26th2024.date, date)
-  local key = (daysdifference) % 12
-  -- vim.print("trying to get key of day")
-  -- vim.print("keyofday is " .. keys[key])
-  -- print("key of day is " .. keys[key])
+  local daysdifference = M.days_difference(keyIndex0.date, date)
+  vim.print("days different from oct 8th 2024: " .. daysdifference)
+  local key = M.getdifferencewithmod(daysdifference)
   return keys[key]
 end
 
