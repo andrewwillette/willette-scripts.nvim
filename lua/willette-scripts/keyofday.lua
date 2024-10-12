@@ -34,7 +34,6 @@ M.keyIndex0 = keyIndex0
 
 M.getdifferencewithmod = function(difference) return difference % 12 end
 
-
 M.keyofday = function(date)
   local daysdifference = M.days_difference(keyIndex0.date, date)
   local key = M.getdifferencewithmod(daysdifference)
