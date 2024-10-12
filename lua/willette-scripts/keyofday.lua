@@ -37,9 +37,8 @@ M.getdifferencewithmod = function(difference) return difference % 12 end
 
 M.keyofday = function(date)
   local daysdifference = M.days_difference(keyIndex0.date, date)
-  vim.print("days different from oct 8th 2024: " .. daysdifference)
   local key = M.getdifferencewithmod(daysdifference)
-  return keys[key]
+  return keys[key + 1]
 end
 
 return M
