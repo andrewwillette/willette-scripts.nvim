@@ -35,7 +35,16 @@ M.keyIndex0 = keyIndex0
 M.getdifferencewithmod = function(difference) return difference % 12 end
 
 M.keyofday = function(date)
-  local daysdifference = M.days_difference(keyIndex0.date, date)
+  local current_date = os.date("*t")
+
+  -- Set the time to the beginning of the day (00:00:00)
+  current_date.hour = 0
+  current_date.min = 0
+  current_date.sec = 0
+
+  -- Get the epoch time at the start of the current day
+  local start_of_day = os.time(current_date)
+  local daysdifference = M.days_difference(keyIndex0.date, start_of_day)
   local key = M.getdifferencewithmod(daysdifference)
   return keys[key + 1]
 end
