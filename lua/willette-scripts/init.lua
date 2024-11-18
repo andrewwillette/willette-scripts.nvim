@@ -36,7 +36,7 @@ M.verifyvimcommand = function(vimcmd)
 end
 
 M.verifyvimplugin = function(requireString)
-  local scripts = vim.api.nvim_exec("scriptnames", true)
+  local scripts = vim.cmd("scriptnames")
   local scriptsSplit = vim.split(scripts, "\n")
   for _, v in pairs(scriptsSplit) do
     if v:find(requireString, 1, true) then
@@ -102,7 +102,7 @@ end
 
 -- get base directory name of current git repo
 M.getgitrepobase = function()
-  local out = vim.api.nvim_exec("!basename `git rev-parse --show-toplevel`", true)
+  local out = vim.cmd("!basename `git rev-parse --show-toplevel`")
   local lines = {}
   for s in out:gmatch("[^\r\n]+") do
     table.insert(lines, s)
