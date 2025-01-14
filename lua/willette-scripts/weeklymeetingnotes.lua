@@ -5,7 +5,8 @@ local M = {}
 local nextdatefordayofweek = function(weekday)
   local today = os.date("*t")
   local day = 0
-  if weekday == "Sunday" then
+  weekday = weekday:sub(1, 1):upper() .. weekday:sub(2):lower()
+  if weekday == "sunday" then
     day = 1
   elseif weekday == "Monday" then
     day = 2
