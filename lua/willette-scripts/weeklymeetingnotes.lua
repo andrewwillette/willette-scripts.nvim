@@ -37,18 +37,22 @@ end
 ---@field public directory string the location for the weekly meeting files to be stored
 ---@field public template string filepath to a "template" used for initializing new meeting notes
 ---@field public dayofweek string the day of the week the meeting is held, "Monday", "Tuesday", etc.
+---@field public filetype? string|nil
 
 ---open a weekly note
 ---@param wnc WeeklyNoteConfig
 ---@return string|nil error message if an error occurs, or nil otherwise
 M.openweeklynote = function(wnc)
+  if wnc.filetype == nil then
+    wnc.filetype = ".txt"
+  end
   local nextmeetingdate, err = nextdatefordayofweek(wnc.dayofweek)
   if err ~= nil or nextmeetingdate == nil then
     vim.notify("error getting next meeting date: " .. err)
     return err
   end
   nextmeetingdate = nextmeetingdate:gsub("-", "_")
-  local filename = wnc.meetingname .. "_" .. nextmeetingdate .. ".md"
+  local filename = wnc.meetingname .. "_" .. nextmeetingdate .. wnc.filetype
   local fileexists = io.open(wnc.directory .. "/" .. filename, "r")
   if fileexists ~= nil then
     vim.cmd("e " .. wnc.directory .. "/" .. filename)
