@@ -1,5 +1,7 @@
 local M = {}
 
+-- diaryentry
+-- I maintain a "diary" on my machine. This opens the year/month file
 M.diaryentry = function()
   local home = vim.fn.expand("$HOME")
   local year = os.date("%Y")
