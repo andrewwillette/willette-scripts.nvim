@@ -1,5 +1,11 @@
 local M = {}
 
+-- used for weird behavior where LHS being replaced needs to escape hyphens, example lhs == <A-l>
+local function escape_hyphen_for_gsub(text)
+  local returnin = text:gsub("%-", "%%-")
+  return returnin
+end
+
 -- used for speeding up some maintenance on my neovim config
 function M.update_keymap()
   local start_pos = vim.fn.getpos("'<")
@@ -11,7 +17,7 @@ function M.update_keymap()
   local keymap_lhs
   for _, line in ipairs(lines) do
     if line:find('vim.keymap.set') then
-      keymap_lhs = line:match('vim.keymap.set%("n",%s*"(.-)"')
+      keymap_lhs = line:match('vim.keymap.set%(".*",%s*"(.-)"')
       break
     end
   end
@@ -49,9 +55,10 @@ function M.update_keymap()
   end
 
   -- Modify the highlighted lines with new keymap entry
+  local pattern = 'vim.keymap.set%("n",%s*"' .. escape_hyphen_for_gsub(keymap_lhs) .. '"'
+  local toreplace = 'vim.keymap.set("n", keymaps["' .. new_key_description .. '"]'
   for i, line in ipairs(lines) do
-    lines[i] = line:gsub('vim.keymap.set%("n",%s*"' .. keymap_lhs .. '"',
-      string.format('vim.keymap.set("n", keymaps["%s"]', new_key_description))
+    lines[i], _ = line:gsub(pattern, toreplace)
   end
 
   vim.fn.setline(start_line, lines)

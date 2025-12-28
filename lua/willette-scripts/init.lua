@@ -76,6 +76,15 @@ end
 
 M.oneoffterminaltab = function(tcmd)
   vim.cmd("tabe |terminal " .. tcmd)
+  local bufnr = vim.api.nvim_get_current_buf()
+  vim.api.nvim_create_autocmd("TermClose", {
+    buffer = bufnr,
+    callback = function()
+      if vim.v.event.status == 0 then
+        vim.api.nvim_buf_delete(bufnr, { force = true })
+      end
+    end,
+  })
   vim.cmd("startinsert")
 end
 
