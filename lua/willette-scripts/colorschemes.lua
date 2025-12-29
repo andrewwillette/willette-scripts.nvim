@@ -1,11 +1,12 @@
 local M = {}
 
-local verifyplugin = require("willette-scripts").verifynvimplugin
-local verifyvimcmd = require("willette-scripts").verifyvimcommand
+local verify_plugin = require("willette-scripts").verify_nvim_plugin
+local verify_vim_cmd = require("willette-scripts").verify_vim_command
 
-local function setLualine(scheme)
-  local ok, llc = verifyplugin("lualine-config")
-  if not ok or llc == nil then return end
+---@param scheme string Lualine theme name
+local function set_lualine(scheme)
+  local ok, llc = verify_plugin("lualine-config")
+  if not ok then return end
   llc.setTheme(scheme)
 end
 
@@ -43,7 +44,7 @@ local function monokaipro()
     override = function(_) end,
   })
   vim.cmd [[colorscheme monokai-pro]]
-  setLualine("monokai-pro")
+  set_lualine("monokai-pro")
 end
 
 local function onedark()
@@ -95,8 +96,8 @@ local function moonfly()
 end
 
 local function tundra()
-  local ok, nvimtundra = verifyplugin("nvim-tundra")
-  if not ok or nvimtundra == nil then return end
+  local ok, nvimtundra = verify_plugin("nvim-tundra")
+  if not ok then return end
   nvimtundra.setup({
     transparent_background = false,
     editor = {
@@ -139,12 +140,12 @@ local function tundra()
   })
   vim.opt.background = 'dark'
   vim.cmd('colorscheme tundra')
-  setLualine("codedark")
+  set_lualine("codedark")
 end
 
 local function kanagawa()
-  local ok, kanag = verifyplugin("kanagawa")
-  if not ok or kanag == nil then return end
+  local ok, kanag = verify_plugin("kanagawa")
+  if not ok then return end
   kanag.setup({
     compile = false,  -- enable compiling the colorscheme
     undercurl = true, -- enable undercurls
@@ -171,33 +172,33 @@ local function kanagawa()
   })
   -- setup must be called before loading
   vim.cmd("colorscheme kanagawa")
-  setLualine("nightfly")
+  set_lualine("nightfly")
 end
 
 local function kanagawabones()
   vim.o.background = "dark"
   vim.g.seoulbones = { italic_comments = false }
-  if not verifyvimcmd("colorscheme kanagawabones") then return end
-  setLualine("codedark")
+  if not verify_vim_cmd("colorscheme kanagawabones") then return end
+  set_lualine("codedark")
 end
 
 local function seoulbonesdark()
   vim.o.background = "dark"
   vim.g.seoulbones = { italic_comments = false }
-  if not verifyvimcmd("colorscheme seoulbones") then return end
-  setLualine("seoul256")
+  if not verify_vim_cmd("colorscheme seoulbones") then return end
+  set_lualine("seoul256")
 end
 
 local function seoulboneslight()
   vim.o.background = "light"
   vim.g.seoulbones = { italic_comments = false }
-  if not verifyvimcmd("colorscheme seoulbones") then return end
-  setLualine("seoul256")
+  if not verify_vim_cmd("colorscheme seoulbones") then return end
+  set_lualine("seoul256")
 end
 
 local function configurecatppuccin()
-  local ok, catppuccin = verifyplugin("catppuccin")
-  if not ok or catppuccin == nil then return end
+  local ok, catppuccin = verify_plugin("catppuccin")
+  if not ok then return end
   catppuccin.setup({
     dim_inactive = {
       enabled = false,
@@ -288,51 +289,51 @@ end
 local function catpuccinlightlatte()
   configurecatppuccin()
   vim.g.catppuccin_flavour = "latte"
-  if not verifyvimcmd("colorscheme catppuccin") then
+  if not verify_vim_cmd("colorscheme catppuccin") then
     return
   end
-  setLualine("onelight")
+  set_lualine("onelight")
 end
 
 local function catpuccindarkfrappe()
   configurecatppuccin()
   vim.g.catppuccin_flavour = "frappe"
-  if not verifyvimcmd("colorscheme catppuccin") then return end
-  setLualine("horizon")
+  if not verify_vim_cmd("colorscheme catppuccin") then return end
+  set_lualine("horizon")
 end
 
 local function catpuccindarkmacchiato()
   configurecatppuccin()
   vim.g.catppuccin_flavour = "macchiato"
-  if not verifyvimcmd("colorscheme catppuccin") then return end
-  setLualine("horizon")
+  if not verify_vim_cmd("colorscheme catppuccin") then return end
+  set_lualine("horizon")
 end
 
 local function catpuccindarkmocha()
   configurecatppuccin()
   vim.g.catppuccin_flavour = "mocha"
-  if not verifyvimcmd("colorscheme catppuccin") then return end
-  setLualine("horizon")
+  if not verify_vim_cmd("colorscheme catppuccin") then return end
+  set_lualine("horizon")
 end
 
 local function greenisgood()
   vim.o.background = "dark"
-  if not verifyvimcmd("colorscheme greenisgood") then return end
-  setLualine("codedark")
+  if not verify_vim_cmd("colorscheme greenisgood") then return end
+  set_lualine("codedark")
 end
 
 local function monochrome()
   vim.o.background = "dark"
-  if not verifyvimcmd("colorscheme monochrome") then return end
-  setLualine("codedark")
+  if not verify_vim_cmd("colorscheme monochrome") then return end
+  set_lualine("codedark")
 end
 
 local gruvboxmaterial = function()
   vim.opt.termguicolors = true
   vim.o.background = "dark"
   vim.g.gruvbox_material_disable_italic_comment = 0
-  if not verifyvimcmd("colorscheme gruvbox-material") then return end
-  setLualine("gruvbox_dark")
+  if not verify_vim_cmd("colorscheme gruvbox-material") then return end
+  set_lualine("gruvbox_dark")
 end
 
 local gruvboxlight = function()
@@ -355,7 +356,7 @@ local gruvboxlight = function()
     transparent_mode = false,
   })
   vim.cmd("colorscheme gruvbox")
-  setLualine("gruvbox_light")
+  set_lualine("gruvbox_light")
 end
 
 local gruvboxdark = function()
@@ -386,12 +387,12 @@ local gruvboxdark = function()
     transparent_mode = false,
   })
   vim.cmd("colorscheme gruvbox")
-  setLualine("gruvbox_dark")
+  set_lualine("gruvbox_dark")
 end
 
 local function rosepine(bg)
-  local ok, rosepineplugin = verifyplugin("rose-pine")
-  if not ok or rosepineplugin == nil then return end
+  local ok, rosepineplugin = verify_plugin("rose-pine")
+  if not ok then return end
   rosepineplugin.setup({
     --- @usage 'main' | 'moon'
     dark_variant = 'moon',
@@ -438,33 +439,33 @@ end
 
 local rosepinelight = function()
   rosepine "light"
-  setLualine("ayu_light")
+  set_lualine("ayu_light")
 end
 
 local rosepinedark = function()
   rosepine "dark"
-  setLualine("ayu_dark")
+  set_lualine("ayu_dark")
 end
 
 local duskfoxdark = function()
   vim.opt.termguicolors = true
   vim.o.background = "dark"
-  if not verifyvimcmd("colorscheme duskfox") then return end
-  setLualine("palenight")
+  if not verify_vim_cmd("colorscheme duskfox") then return end
+  set_lualine("palenight")
 end
 
 local nightfoxdark = function()
   vim.opt.termguicolors = true
   vim.o.background = "dark"
   vim.cmd("colorscheme nightfox")
-  setLualine("palenight")
+  set_lualine("palenight")
 end
 
 local dayfoxlight = function()
   vim.opt.termguicolors = true
   vim.o.background = "light"
-  if not verifyvimcmd("colorscheme dayfox") then return end
-  setLualine("ayu_light")
+  if not verify_vim_cmd("colorscheme dayfox") then return end
+  set_lualine("ayu_light")
 end
 
 local everforest = function()
