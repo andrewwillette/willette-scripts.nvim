@@ -7,7 +7,7 @@ local verify_vim_cmd = require("willette-scripts").verify_vim_command
 local function set_lualine(scheme)
   local ok, llc = verify_plugin("lualine-config")
   if not ok then return end
-  llc.setTheme(scheme)
+  llc.set_theme(scheme)
 end
 
 local function monokaipro()
